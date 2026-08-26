@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dalbirsingh Matharu — trace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FAFBFD;
+  --bg-inset:#F1F3F9;
+  --surface:#FFFFFF;
+  --border:#E4E8F1;
+  --border-soft:#EDF0F7;
+  --ink:#13152B;
+  --ink-dim:#5B6178;
+  --ink-faint:#9298AC;
+  --violet:#6653F5;
+  --violet-dim:#EDEAFE;
+  --green:#17A673;
+  --green-dim:#E6F7F1;
+  --amber:#C7860B;
+  --amber-dim:#FCF3E2;
+  --radius:10px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--violet); color:#fff;}
+a{color:inherit; text-decoration:none;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.display{font-family:'Space Grotesk',sans-serif;}
+
+/* ================= top chrome ================= */
+.chrome{
+  position:sticky; top:0; z-index:50;
+  background:rgba(250,251,253,0.88);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.chrome-inner{
+  max-width:920px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:13px 24px;
+}
+.chrome-tab{
+  display:flex; align-items:center; gap:9px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  color:var(--ink-dim);
+}
+.rec-dot{
+  width:7px; height:7px; border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 0 3px var(--green-dim);
+  animation:blink 1.8s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1;} 50%{opacity:0.35;}}
+.chrome-links{display:flex; gap:4px;}
+.chrome-links a{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  color:var(--ink-dim);
+  padding:6px 11px;
+  border-radius:7px;
+  transition:all .18s;
+}
+.chrome-links a:hover{background:var(--ink); color:#fff;}
+
+.wrap{max-width:920px; margin:0 auto; padding:0 24px;}
+
+/* ================= hero ================= */
+.hero{padding:70px 0 40px;}
+.hero-id{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  color:var(--ink-faint);
+  margin-bottom:22px;
+  display:flex; gap:18px; flex-wrap:wrap;
+}
+.hero-id b{color:var(--ink-dim); font-weight:500;}
+h1.display{
+  font-size:clamp(34px,5.4vw,54px);
+  font-weight:700;
+  line-height:1.08;
+  letter-spacing:-0.015em;
+  max-width:760px;
+}
+h1.display .accent{color:var(--violet);}
+.hero-sub{
+  margin-top:22px;
+  max-width:600px;
+  font-size:16.5px;
+  color:var(--ink-dim);
+}
+
+/* json card */
+.json-card{
+  margin-top:38px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:0 1px 2px rgba(19,21,43,0.03);
+}
+.json-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:11px 18px;
+  border-bottom:1px solid var(--border-soft);
+  background:var(--bg-inset);
+}
+.json-head .fname{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-dim);}
+.dots{display:flex; gap:6px;}
+.dots span{width:8px; height:8px; border-radius:50%; background:var(--border);}
+.json-body{padding:20px 22px; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.85;}
+.json-body .k{color:#9A5CDB;}
+.json-body .s{color:var(--green);}
+.json-body .n{color:#C7860B;}
+.json-body .punc{color:var(--ink-faint);}
+
+/* uptime strip */
+.uptime{
+  margin-top:16px;
+  display:flex; align-items:center; gap:12px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  color:var(--ink-dim);
+  padding:14px 18px;
+}
+.uptime .lbl{color:var(--ink-faint);}
+.uptime .val{color:var(--ink); font-weight:600; letter-spacing:0.02em;}
+
+/* ================= sections shell ================= */
+section{padding:8px 0 56px;}
+.sec-eyebrow{
+  display:flex; align-items:center; gap:10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  color:var(--ink-faint);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  margin-bottom:16px;
+}
+.sec-eyebrow::before{content:'//'; color:var(--violet);}
+.sec-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(22px,2.6vw,28px);
+  font-weight:600;
+  margin-bottom:28px;
+  letter-spacing:-0.01em;
+}
+
+/* ================= span cards (experience/projects) ================= */
+.span{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--surface);
+  margin-bottom:14px;
+  transition:border-color .2s, box-shadow .2s;
+}
+.span:hover{border-color:#D4D9E8; box-shadow:0 6px 24px rgba(19,21,43,0.05);}
+.span-head{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; flex-wrap:wrap;
+  padding:18px 22px;
+}
+.span-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:17px;
+  font-weight:600;
+}
+.span-org{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  color:var(--violet);
+  margin-top:4px;
+}
+.span-right{display:flex; align-items:center; gap:10px;}
+.pill{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  padding:4px 10px;
+  border-radius:100px;
+  white-space:nowrap;
+}
+.pill.status{background:var(--green-dim); color:var(--green); font-weight:600;}
+.pill.time{background:var(--bg-inset); color:var(--ink-dim);}
+.span-body{
+  padding:0 22px 22px;
+  border-top:1px solid var(--border-soft);
+}
+.span-body ul{list-style:none; padding-top:16px;}
+.span-body li{
+  position:relative;
+  padding-left:22px;
+  margin-bottom:11px;
+  font-size:14px;
+  color:var(--ink-dim);
+}
+.span-body li::before{
+  content:'›';
+  position:absolute; left:0; top:0;
+  color:var(--violet);
+  font-weight:700;
+}
+.span-body li b{color:var(--ink); font-weight:600;}
+.metric-row{
+  display:flex; gap:10px; flex-wrap:wrap;
+  padding-top:16px;
+}
+.metric{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  background:var(--violet-dim);
+  color:var(--violet);
+  padding:6px 11px;
+  border-radius:7px;
+  font-weight:600;
+}
+
+/* ================= project cards ================= */
+.proj-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+@media (max-width:680px){.proj-grid{grid-template-columns:1fr;}}
+.proj{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--surface);
+  padding:22px;
+  display:flex; flex-direction:column;
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.proj:hover{transform:translateY(-2px); box-shadow:0 10px 30px rgba(19,21,43,0.07); border-color:var(--violet);}
+.proj-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
+.proj-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;
+  padding:3px 9px;
+  border-radius:6px;
+  background:var(--bg-inset);
+  color:var(--ink-dim);
+}
+.proj h3{font-family:'Space Grotesk',sans-serif; font-size:16.5px; font-weight:600; margin-bottom:8px;}
+.proj p{font-size:13.5px; color:var(--ink-dim); margin-bottom:6px;}
+.proj-stack{
+  display:flex; flex-wrap:wrap; gap:6px;
+  margin-top:auto; padding-top:14px;
+}
+.proj-stack span{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;
+  color:var(--ink-faint);
+  padding:3px 8px;
+  border:1px solid var(--border);
+  border-radius:100px;
+}
+.proj-link{
+  margin-top:12px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  color:var(--violet);
+  display:flex; align-items:center; gap:5px;
+}
+
+/* ================= open source callout ================= */
+.oss{
+  border:1px solid var(--border);
+  border-left:3px solid var(--amber);
+  border-radius:var(--radius);
+  background:var(--surface);
+  padding:24px 26px;
+  display:flex; gap:18px; align-items:flex-start;
+}
+.oss-icon{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px; font-weight:700;
+  background:var(--amber-dim); color:var(--amber);
+  padding:6px 10px; border-radius:7px;
+  white-space:nowrap;
+}
+.oss h3{font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:600; margin-bottom:8px;}
+.oss p{font-size:14px; color:var(--ink-dim); margin-bottom:4px;}
+.oss .oss-link{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--violet); margin-top:10px; display:inline-block;}
+
+/* ================= ip block ================= */
+.ip-block{
+  background:var(--ink);
+  color:#fff;
+  border-radius:var(--radius);
+  padding:34px 32px;
+  display:flex; justify-content:space-between; align-items:center;
+  gap:24px; flex-wrap:wrap;
+}
+.ip-block .lbl{font-family:'JetBrains Mono',monospace; font-size:11px; color:#9A93F0; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px;}
+.ip-title{font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:600; margin-bottom:8px;}
+.ip-desc{font-size:14px; color:rgba(255,255,255,0.65); max-width:420px;}
+.ip-id{font-family:'JetBrains Mono',monospace; font-size:12px; color:rgba(255,255,255,0.5); margin-top:14px;}
+.ip-badge{
+  font-family:'JetBrains Mono',monospace; font-size:12px;
+  border:1px solid rgba(255,255,255,0.22);
+  padding:9px 15px; border-radius:100px;
+  white-space:nowrap;
+}
+
+/* ================= certs + achievements ================= */
+.two-col{display:grid; grid-template-columns:1.3fr 1fr; gap:14px;}
+@media (max-width:700px){.two-col{grid-template-columns:1fr;}}
+.panel{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--surface);
+  padding:24px;
+}
+.panel h3{font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:600; margin-bottom:16px;}
+.cert-row{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid var(--border-soft);
+  font-size:13.5px;
+}
+.cert-row:last-child{border-bottom:none;}
+.cert-row .who{color:var(--ink-faint); font-family:'JetBrains Mono',monospace; font-size:11px;}
+.badge-grid{display:flex; flex-wrap:wrap; gap:10px;}
+.badge{
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  width:74px;
+}
+.badge-icon{
+  width:52px; height:52px; border-radius:12px;
+  background:var(--violet-dim);
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+}
+.badge-label{font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--ink-dim); text-align:center;}
+
+/* ================= skills ================= */
+.skill-row{
+  display:grid; grid-template-columns:150px 1fr;
+  gap:18px; align-items:start;
+  padding:15px 0;
+  border-bottom:1px solid var(--border-soft);
+}
+@media (max-width:600px){.skill-row{grid-template-columns:1fr;}}
+.skill-row:last-child{border-bottom:none;}
+.skill-cat{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.05em; padding-top:7px;}
+.chips{display:flex; flex-wrap:wrap; gap:8px;}
+.chip{
+  font-size:12.5px;
+  padding:6px 12px;
+  border:1px solid var(--border);
+  border-radius:100px;
+  background:var(--surface);
+  transition:all .18s;
+}
+.chip:hover{border-color:var(--violet); color:var(--violet);}
+
+/* ================= education/leadership ================= */
+.edu-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+@media (max-width:680px){.edu-grid{grid-template-columns:1fr;}}
+
+/* ================= footer / return ================= */
+footer{padding:70px 0 90px;}
+.return-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--surface);
+  padding:44px 40px;
+  text-align:center;
+}
+.return-tag{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--green); margin-bottom:16px;}
+.return-title{font-family:'Space Grotesk',sans-serif; font-size:clamp(26px,4vw,38px); font-weight:700; margin-bottom:14px;}
+.return-title .accent{color:var(--violet);}
+.return-sub{color:var(--ink-dim); max-width:440px; margin:0 auto; font-size:15px;}
+.cta-row{display:flex; justify-content:center; gap:14px; margin-top:30px; flex-wrap:wrap;}
+.btn{
+  font-family:'JetBrains Mono',monospace; font-size:13px;
+  padding:12px 24px; border-radius:8px;
+  border:1px solid var(--ink);
+  transition:all .2s;
+}
+.btn.solid{background:var(--ink); color:#fff;}
+.btn.solid:hover{background:var(--violet); border-color:var(--violet);}
+.btn.ghost:hover{background:var(--ink); color:#fff;}
+.foot-meta{
+  text-align:center; margin-top:40px;
+  font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-faint);
+}
+
+.reveal{opacity:0; transform:translateY(16px); transition:opacity .55s ease, transform .55s ease;}
+.reveal.in{opacity:1; transform:translateY(0);}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1; transform:none; transition:none;}
+  .rec-dot{animation:none;}
+  html{scroll-behavior:auto;}
+}
+</style>
+</head>
+<body>
+
+<div class="chrome">
+  <div class="chrome-inner">
+    <div class="chrome-tab"><span class="rec-dot"></span> trace · dalbirsingh-matharu</div>
+    <div class="chrome-links">
+      <a href="#experience">experience</a>
+      <a href="#projects">projects</a>
+      <a href="#oss">open&nbsp;source</a>
+      <a href="#skills">stack</a>
+      <a href="#contact">contact</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-id">
+      <span><b>trace_id</b> 8879703613-dm</span>
+      <span><b>region</b> thane, in</span>
+      <span><b>status</b> <span style="color:var(--green);">available</span></span>
+    </div>
+    <h1 class="display">Every LLM demo works.<br>I ship the <span class="accent">10%</span> that keeps it working at 2am.</h1>
+    <p class="hero-sub">Production AI engineer who's shipped multi-agent architectures and RAG pipelines that hold up under real traffic — not just notebooks. Built the AI review system running inside Longani's Word/PowerPoint add-ins today, and co-architected the SQL Assistant at Worter Technologies before that. Registered IP holder in AI-powered SQL generation, and the kind of engineer who reads the LangChain source closely enough to file a bug against it.</p>
+
+    <div class="json-card reveal">
+      <div class="json-head">
+        <span class="fname">identity.json</span>
+        <div class="dots"><span></span><span></span><span></span></div>
+      </div>
+      <div class="json-body">
+<span class="punc">{</span><br>
+&nbsp;&nbsp;<span class="k">"name"</span><span class="punc">:</span> <span class="s">"Dalbirsingh Matharu"</span><span class="punc">,</span><br>
+&nbsp;&nbsp;<span class="k">"role"</span><span class="punc">:</span> <span class="s">"AI Engineer"</span><span class="punc">,</span><br>
+&nbsp;&nbsp;<span class="k">"specializes_in"</span><span class="punc">:</span> <span class="punc">[</span><span class="s">"agentic orchestration"</span><span class="punc">,</span> <span class="s">"RAG"</span><span class="punc">,</span> <span class="s">"LLMOps"</span><span class="punc">]</span><span class="punc">,</span><br>
+&nbsp;&nbsp;<span class="k">"currently"</span><span class="punc">:</span> <span class="s">"Longani Consulting, LLC"</span><span class="punc">,</span><br>
+&nbsp;&nbsp;<span class="k">"ip_holder"</span><span class="punc">:</span> <span class="s">"SW-19859/2024"</span><span class="punc">,</span><br>
+&nbsp;&nbsp;<span class="k">"education"</span><span class="punc">:</span> <span class="s">"B.E. Data Science, CGPA "</span><span class="n">9.3</span><br>
+<span class="punc">}</span>
+      </div>
+      <div class="uptime">
+        <span class="lbl">career_runtime</span>
+        <span class="val mono" id="uptimeVal">calculating…</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="sec-eyebrow">runtime / production</div>
+    <div class="sec-title">Experience</div>
+
+    <div class="span reveal">
+      <div class="span-head">
+        <div>
+          <div class="span-name">AI Engineer</div>
+          <div class="span-org">Longani Consulting, LLC</div>
+        </div>
+        <div class="span-right">
+          <span class="pill status">● running</span>
+          <span class="pill time">Dec 2025 → present</span>
+        </div>
+      </div>
+      <div class="span-body">
+        <ul>
+          <li>Owned end-to-end delivery of a production AI review system for Office.js (Word/PowerPoint) add-ins on Azure — <b>7+ features</b>, <b>100+ automated checks</b>, async backend APIs, LLM-powered agents, and a custom rules engine.</li>
+          <li>Cut AI-powered check latency to <b>under 12 seconds</b> in a live codebase by designing LLM orchestration pipelines with feature-driven routing, PostgreSQL-backed workflow state, and iterative refinement loops.</li>
+        </ul>
+        <div class="metric-row">
+          <span class="metric">&lt;12s p95 latency</span>
+          <span class="metric">100+ automated checks</span>
+          <span class="metric">7+ shipped features</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="span reveal">
+      <div class="span-head">
+        <div>
+          <div class="span-name">Generative AI Engineer</div>
+          <div class="span-org">Worter Technologies Pvt Ltd</div>
+        </div>
+        <div class="span-right">
+          <span class="pill status" style="background:var(--bg-inset); color:var(--ink-dim);">✓ completed</span>
+          <span class="pill time">Jun 2025 → Nov 2025</span>
+        </div>
+      </div>
+      <div class="span-body">
+        <ul>
+          <li>Co-architected and deployed a multi-agent LLM-powered <b>SQL Assistant</b> on FastAPI + GCP, with SQL validation, automatic retries, and LLM-based evaluation.</li>
+          <li>Built a RAG-based schema retrieval pipeline on ChromaDB across <b>400+ tables</b>, cutting response time via schema pruning, SQL caching, and access control.</li>
+        </ul>
+        <div class="metric-row">
+          <span class="metric">~90% SQL accuracy</span>
+          <span class="metric">400+ tables indexed</span>
+          <span class="metric">6–8s response time</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="sec-eyebrow">side quests / shipped for fun</div>
+    <div class="sec-title">Projects</div>
+
+    <div class="proj-grid">
+      <div class="proj reveal">
+        <div class="proj-top"><span class="proj-tag">multi-agent</span></div>
+        <h3>Data Analyst Agent</h3>
+        <p>Upload a dataset, ask a question in plain English. A LangGraph pipeline cleans it, validates, retries on failure, runs EDA and root-cause analysis, generates charts, and profiles the data — end to end.</p>
+        <p style="color:var(--violet); font-weight:600;">Hours of manual analysis → minutes.</p>
+        <div class="proj-stack"><span>LangGraph</span><span>LangSmith</span><span>Gemini</span><span>Streamlit</span></div>
+        <a class="proj-link" href="https://github.com/Dalbirsm03/LangGraph_Data_Science_Agent" target="_blank">↗ view source</a>
+      </div>
+
+      <div class="proj reveal">
+        <div class="proj-top"><span class="proj-tag">multimodal</span></div>
+        <h3>L.U.M.I.S — Multimodal AI Assistant</h3>
+        <p>A real-time assistant that watches video, audio, and mouse activity to understand what you're doing and offer context-aware help, without you having to explain your screen to it.</p>
+        <div class="proj-stack"><span>Gemini 1.5 Pro</span><span>GPT-4</span><span>LangChain</span><span>OpenCV</span></div>
+        <a class="proj-link" href="https://github.com/Dalbirsm03/L.U.M.I.S" target="_blank">↗ view source</a>
+      </div>
+
+      <div class="proj reveal">
+        <div class="proj-top"><span class="proj-tag">mlops</span></div>
+        <h3>Forecasting Platform — MLOps &amp; Vertex AI</h3>
+        <p>Multivariate sales forecasting with feature engineering and root-cause analysis, MLflow-tracked training across Linear Regression, Random Forest, and XGBoost.</p>
+        <p style="color:var(--violet); font-weight:600;">R² &gt; 0.99, MSE &lt; 3, sub-50ms p95 serving.</p>
+        <div class="proj-stack"><span>Vertex AI</span><span>Docker</span><span>MLflow</span><span>GitHub Actions</span></div>
+        <a class="proj-link" href="https://github.com/Dalbirsm03/Trends-Forecasting-Analytics-MLOps-Vertex-AI" target="_blank">↗ view source</a>
+      </div>
+
+      <div class="proj reveal">
+        <div class="proj-top"><span class="proj-tag">agentic ml</span></div>
+        <h3>Machine Learning Agentic System</h3>
+        <p>Give it a dataset and a question in plain English — it cleans and validates the data, automatically branches into supervised or unsupervised ML, trains and evaluates the model, then explains the result in plain language.</p>
+        <p style="color:var(--violet); font-weight:600;">Auto-detects classification vs. regression vs. clustering, then builds, trains, and runs the model itself.</p>
+        <div class="proj-stack"><span>LangChain</span><span>LangGraph</span><span>Gemini Pro</span><span>scikit-learn</span></div>
+        <a class="proj-link" href="https://github.com/Dalbirsm03/Machine-Learning-Agentic-System-LangChain-Framework" target="_blank">↗ view source</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- OSS -->
+  <section id="oss">
+    <div class="sec-eyebrow">upstream / off the clock</div>
+    <div class="sec-title">Open source &amp; leadership</div>
+    <div class="oss reveal" style="margin-bottom:14px;">
+      <div class="oss-icon">BUG</div>
+      <div>
+        <h3>Filed and reproduced a bug in LangChain core</h3>
+        <p>Reported a <b style="color:var(--ink);">KeyError in PIIMiddleware</b> affecting hash and mask redaction strategies — with a minimal, self-contained repro a maintainer could run as-is, in <b style="color:var(--ink);">langchain-ai/langchain</b>, the framework his own production systems are built on.</p>
+        <a class="oss-link" href="https://github.com/langchain-ai/langchain/issues/35647" target="_blank">↗ issue #35647</a>
+      </div>
+    </div>
+    <div class="oss reveal" style="border-left-color:var(--violet);">
+      <div class="oss-icon" style="background:var(--violet-dim); color:var(--violet);">LEAD</div>
+      <div>
+        <h3>Software Lead, Modified Auto Club — Autonomous Vehicle System</h3>
+        <p>Led a 5-person team to build an autonomous vehicle with real-time object detection, avoidance, and turn navigation using Raspberry Pi, Arduino, OpenCV, and sensor fusion, hitting <b style="color:var(--ink);">~85% real-world accuracy</b>.</p>
+        <p><b style="color:var(--ink);">2nd place</b> at Exault, a college project competition.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- IP -->
+  <section id="ip">
+    <div class="sec-eyebrow">registered</div>
+    <div class="sec-title">Intellectual property</div>
+    <div class="ip-block reveal">
+      <div>
+        <div class="lbl">copyright · s.q.l.a.g.e</div>
+        <div class="ip-title">SQL Automated Generation and Execution</div>
+        <div class="ip-desc">A registered, copyrighted approach to AI-powered SQL generation — not just a line on a résumé.</div>
+        <div class="ip-id">Copyright ID · SW-19859/2024</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTS + ACHIEVEMENTS -->
+  <section>
+    <div class="sec-eyebrow">credentials / receipts</div>
+    <div class="sec-title">Certifications &amp; GitHub</div>
+    <div class="two-col reveal">
+      <div class="panel">
+        <h3>Certifications</h3>
+        <div class="cert-row"><span>Machine Learning, Data Science &amp; Generative AI with Python</span><span class="who">Udemy</span></div>
+        <div class="cert-row"><span>Agentic AI Bootcamp — LangGraph &amp; LangChain</span><span class="who">Udemy</span></div>
+        <div class="cert-row"><span>Getting Started with Deep Learning</span><span class="who">NVIDIA</span></div>
+        <div class="cert-row"><span>Power BI for Business Intelligence</span><span class="who">Udemy</span></div>
+      </div>
+      <div class="panel">
+        <h3>GitHub achievements</h3>
+        <div class="badge-grid">
+          <div class="badge"><div class="badge-icon">🦈</div><div class="badge-label">Pull Shark ×2</div></div>
+          <div class="badge"><div class="badge-icon">⚡</div><div class="badge-label">Quickdraw</div></div>
+          <div class="badge"><div class="badge-icon">🎯</div><div class="badge-label">YOLO</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="sec-eyebrow">stack</div>
+    <div class="sec-title">What's under the hood</div>
+    <div class="panel reveal">
+      <div class="skill-row">
+        <div class="skill-cat">Languages</div>
+        <div class="chips"><span class="chip">Python</span><span class="chip">JavaScript</span><span class="chip">SQL</span></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat">Generative AI</div>
+        <div class="chips">
+          <span class="chip">Large Language Models (LLMs)</span><span class="chip">Prompt Engineering</span>
+          <span class="chip">Retrieval-Augmented Generation (RAG)</span><span class="chip">AI Agents</span>
+          <span class="chip">Multi-Agent Systems</span><span class="chip">LLMOps</span>
+          <span class="chip">Model Context Protocol (MCP)</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat">AI Frameworks &amp; ML Tools</div>
+        <div class="chips">
+          <span class="chip">LangChain</span><span class="chip">LangGraph</span><span class="chip">LangSmith</span>
+          <span class="chip">CrewAI</span><span class="chip">MLflow</span><span class="chip">PyTorch</span>
+          <span class="chip">Scikit-learn</span><span class="chip">Natural Language Processing</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat">Backend &amp; APIs</div>
+        <div class="chips">
+          <span class="chip">FastAPI</span><span class="chip">REST APIs</span><span class="chip">Async Processing</span>
+          <span class="chip">API Integration</span><span class="chip">Pydantic</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat">Cloud &amp; DevOps</div>
+        <div class="chips">
+          <span class="chip">Google Cloud Platform</span><span class="chip">Vertex AI</span><span class="chip">AWS</span>
+          <span class="chip">Azure</span><span class="chip">Docker</span><span class="chip">GitHub Actions</span><span class="chip">GitLab CI/CD</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat">Database &amp; Vector DBs</div>
+        <div class="chips"><span class="chip">MySQL</span><span class="chip">PostgreSQL</span><span class="chip">Neo4j</span><span class="chip">FAISS</span><span class="chip">Chroma</span></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat">AI Platforms &amp; Models</div>
+        <div class="chips"><span class="chip">OpenAI</span><span class="chip">Claude</span><span class="chip">Google Gemini</span><span class="chip">Hugging Face</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section>
+    <div class="sec-eyebrow">foundation</div>
+    <div class="sec-title">Education</div>
+    <div class="edu-grid reveal">
+      <div class="panel">
+        <h3 style="margin-bottom:10px;">B.E. in Data Science</h3>
+        <p style="color:var(--ink-dim); font-size:14px;">A.P. Shah Institute of Technology, Thane — 2021 to 2025.</p>
+        <p style="color:var(--ink-dim); font-size:14px; margin-top:8px;">CGPA <b style="color:var(--ink);">9.3</b></p>
+      </div>
+      <div class="panel">
+        <h3 style="margin-bottom:10px;">High School</h3>
+        <p style="color:var(--ink-dim); font-size:14px;">Rao Junior College of Science — 2019 to 2021.</p>
+        <p style="color:var(--ink-dim); font-size:14px; margin-top:8px;"><b style="color:var(--ink);">95%</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <footer id="contact">
+    <div class="return-card reveal">
+      <div class="return-tag">return status · 200 OK</div>
+      <div class="return-title">Let's route something<br>into <span class="accent">production</span>.</div>
+      <p class="return-sub">Open to AI Engineering roles building agentic systems, RAG pipelines, and LLM orchestration at scale.</p>
+      <div class="cta-row">
+        <a class="btn solid" href="mailto:dalbirsm03@gmail.com">email me →</a>
+        <a class="btn ghost" href="https://linkedin.com/in/dalbirsingh-matharu" target="_blank">linkedin</a>
+        <a class="btn ghost" href="https://github.com/Dalbirsm03" target="_blank">github</a>
+        <a class="btn ghost" href="tel:+918879703613">+91 88797 03613</a>
+      </div>
+    </div>
+    <div class="foot-meta">DALBIRSINGH MATHARU · THANE, MAHARASHTRA, IN · trace closed</div>
+  </footer>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); } });
+  }, {threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // live "career runtime" counter since first professional role (June 2025)
+  const start = new Date('2025-06-01T00:00:00Z').getTime();
+  const el = document.getElementById('uptimeVal');
+  function tick(){
+    const now = Date.now();
+    let diff = Math.floor((now - start) / 1000);
+    const days = Math.floor(diff / 86400); diff -= days*86400;
+    const hrs = Math.floor(diff / 3600); diff -= hrs*3600;
+    const mins = Math.floor(diff / 60);
+    const secs = diff - mins*60;
+    el.textContent = `${days}d ${String(hrs).padStart(2,'0')}h ${String(mins).padStart(2,'0')}m ${String(secs).padStart(2,'0')}s`;
+  }
+  tick();
+  setInterval(tick, 1000);
+});
+</script>
+
+</body>
+</html>
